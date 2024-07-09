@@ -60,7 +60,7 @@ class Predictor:
 
         with torch.no_grad():
             self.feature_extractor.eval()
-            train_features: np.ndarray = self.feature_extractor(input=input_tensor)
+            train_features: torch.Tensor = self.feature_extractor(input=input_tensor)
 
         self.classifier.fit(
             X=train_features.detach().cpu().numpy(), 
@@ -83,7 +83,7 @@ class Predictor:
 
         with torch.no_grad():
             self.feature_extractor.eval()
-            test_features: np.ndarray = self.feature_extractor(input=input_tensor)
+            test_features: torch.Tensor = self.feature_extractor(input=input_tensor)
 
         predicted_labels: np.ndarray = self.classifier.predict(
             X=test_features.detach().cpu().numpy(),
