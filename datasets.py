@@ -29,6 +29,7 @@ class DogHeartLabeledDataset(ImageFolder):
     def __getitem__(self, idx: int) -> Tuple[torch.Tensor, int, str]:
         tensor: torch.Tensor; label: int
         tensor, label = super().__getitem__(idx)
+        tensor = tensor.half()
         filename: str = self.filenames[idx]
         return tensor, label, filename
 
@@ -48,7 +49,9 @@ class DogHearUnlabeledDataset(Dataset):
     def __getitem__(self, idx) -> Tuple[torch.Tensor, str]:
         filename: str = self.filenames[idx]
         image: Image = Image.open(os.path.join(self.data_root, filename))
-        tensor: torch.Tensor = self.transformation(image)
+        if image.mode == 'RGBA':
+            image = image.convert('RGB')
+        tensor: torch.Tensor = self.transformation(image).half()
         return tensor, filename
 
 
